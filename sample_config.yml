@@ -1,5 +1,7 @@
 key: 
-secret: 
+secret:
+group_symbol: PALN
+state_code: US-IN 
 auth_url: https://oauth.oclc.org/auth
 token_url: https://oauth.oclc.org/token
 metadata_service_url: https://worldcat.org

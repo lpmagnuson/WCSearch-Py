@@ -32,7 +32,6 @@ with open(input_file, 'r', encoding="utf-8") as f:
   rows = list(reader)
   header = rows.pop(0)
   header.extend(('Held By GROUP', 'Held By STATE', 'Total WorldCat Holdings'))
-  #print(header)
 
 #Open file to which to write results
 with open("output-oclc-holdings.csv", "w", encoding="utf-8", newline='') as y:
@@ -59,12 +58,17 @@ def main():
         except BaseException as err:
           print(err)
 
+        query_group = config.get('group_symbol')
+        query_state = config.get('state_code')
+
         wc2_queries = []
         for index in search_indexes:
             if index:
                 index = str(index)
-                QueryURLs = {'heldByGroup':'/bibs-summary-holdings?oclcNumber='+ index + '&heldByGroup=PALN&format=json',
-                            'heldInState':'/bibs-summary-holdings?oclcNumber='+ index + '&heldInState=US-IN&format=json',
+                query_group = str(query_group)
+                query_state = str(query_state)
+                QueryURLs = {'heldByGroup':'/bibs-summary-holdings?oclcNumber='+ index + '&heldByGroup='+ query_group +'&format=json',
+                            'heldInState':'/bibs-summary-holdings?oclcNumber='+ index + '&heldInState='+ query_state +'&format=json',
                             'totalHoldings':'/bibs-summary-holdings?oclcNumber='+ index + '&format=json'
                             }
 
@@ -79,13 +83,13 @@ def main():
                 try:
                   getCall = QueryURLs['heldByGroup']
                   group = str(getResponse())
-                  print("group="+group)
+                  #print("group="+group)
                   getCall = QueryURLs['heldInState']
                   state = str(getResponse())
-                  print("state="+state)
+                  #print("state="+state)
                   getCall = QueryURLs['totalHoldings']
                   total=str(getResponse())
-                  print("total="+total)
+                  #print("total="+total)
                   listforCSV = [group,state,total]
                   row.extend((listforCSV))
                   print(row)
